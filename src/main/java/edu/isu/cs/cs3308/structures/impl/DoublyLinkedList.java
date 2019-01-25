@@ -1,21 +1,38 @@
-package edu.isu.cs.cs3308.structures;
+package edu.isu.cs.cs3308.structures.impl;
 
-/**
- *
- * @author Isaac Griffith
- * @param <E> Element Type
- */
-public interface List<E> {
+import edu.isu.cs.cs3308.structures.List;
+import edu.isu.cs.cs3308.structures.Node;
+
+public class DoublyLinkedList<E> implements List<E> {
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public DoublyLinkedList() {
+        SentinelNode frontNode = new SentinelNode();
+        SentinelNode backNode = new SentinelNode();
+
+        head = frontNode;
+        tail = backNode;
+        size = 0;
+    }
 
     /**
      * @return first element in the list or null if the list is empty.
      */
-    E first();
+    @Override
+    public E first() {
+        return null;
+    }
 
     /**
      * @return last element in the list or null if the list is empty.
      */
-    E last();
+    @Override
+    public E last() {
+        return null;
+    }
 
     /**
      * Adds the provided element to the end of the list, only if the element is
@@ -23,7 +40,10 @@ public interface List<E> {
      *
      * @param element Element to be added to the end of the list.
      */
-    void addLast(E element);
+    @Override
+    public void addLast(E element) {
+
+    }
 
     /**
      * Adds the provided element to the front of the list, only if the element
@@ -31,21 +51,30 @@ public interface List<E> {
      *
      * @param element Element to be added to the front of the list.
      */
-    void addFirst(E element);
+    @Override
+    public void addFirst(E element) {
+
+    }
 
     /**
      * Removes the element at the front of the list.
      *
      * @return Element at the front of the list, or null if the list is empty.
      */
-    E removeFirst();
+    @Override
+    public E removeFirst() {
+        return null;
+    }
 
     /**
      * Removes the element at the end of the list.
      *
      * @return Element at the end of the list, or null if the list is empty.
      */
-    E removeLast();
+    @Override
+    public E removeLast() {
+        return null;
+    }
 
     /**
      * Inserts the given element into the list at the provided index. The
@@ -55,9 +84,12 @@ public interface List<E> {
      * the list.
      *
      * @param element Element to be added (as long as it is not null).
-     * @param index Index in the list where the element is to be inserted.
+     * @param index   Index in the list where the element is to be inserted.
      */
-    void insert(E element, int index);
+    @Override
+    public void insert(E element, int index) {
+
+    }
 
     /**
      * Removes the element at the given index and returns the value.
@@ -66,7 +98,10 @@ public interface List<E> {
      * @return The value of the element at the given index, or null if the index
      * is greater than or equal to the size of the list or less than 0.
      */
-    E remove(int index);
+    @Override
+    public E remove(int index) {
+        return null;
+    }
 
     /**
      * Retrieves the value at the specified index. Will return null if the index
@@ -77,27 +112,83 @@ public interface List<E> {
      * @return Element at the given index, or null if the index is less than 0
      * or greater than or equal to the list size.
      */
-    E get(int index);
+    @Override
+    public E get(int index) {
+        return null;
+    }
 
     /**
      * @return The current size of the list. Note that 0 is returned for an
      * empty list.
      */
-    int size();
+    @Override
+    public int size() {
+        return 0;
+    }
 
     /**
      * @return true if there are no items currently stored in the list, false
      * otherwise.
      */
-    boolean isEmpty();
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 
     /**
      * Prints the contents of the list each item on its own line
      */
-    void printList();
+    @Override
+    public void printList() {
+
+    }
 
     /**
      * Locates a given element in the list and returns the index of that element.
+     *
+     * @param element
      */
-    int indexOf(E element);
+    @Override
+    public int indexOf(E element) {
+        return 0;
+    }
+
+    /**
+     * Represents the data container used in a node-based list.
+     */
+    protected class DataNode implements Node {
+        E data;
+        Node next;
+        Node prev;
+
+        DataNode(E data) {
+            this.data = data;
+            this.next = null;
+        }
+
+        @Override
+        public Node next(){ return next; }
+
+        @Override
+        public Node prev() { return prev; }
+    }
+
+    /**
+     * Represents the end caps of a node-based list.
+     */
+    protected class SentinelNode implements Node {
+        Node next;
+        Node prev;
+
+        SentinelNode() {
+            next = null;
+            prev = null;
+        }
+
+        @Override
+        public Node next() { return next; }
+
+        @Override
+        public Node prev() { return prev; }
+    }
 }

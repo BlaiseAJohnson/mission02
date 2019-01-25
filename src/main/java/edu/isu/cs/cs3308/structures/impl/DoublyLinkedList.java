@@ -1,20 +1,31 @@
+/*
+ * Blaise Johnson
+ * CS 3308
+ * Isaac Griffith
+ * 1/24/19
+ */
+
 package edu.isu.cs.cs3308.structures.impl;
 
 import edu.isu.cs.cs3308.structures.List;
-import edu.isu.cs.cs3308.structures.Node;
 
+/**
+ * Represents a node-based list which can be traversed both forward and backward.
+ * @param <E> The data type of the contents of each Node.
+ * @author Blaise Johnson
+ */
 public class DoublyLinkedList<E> implements List<E> {
 
-    private Node head;
-    private Node tail;
+    private SentinelNode head;
+    private SentinelNode tail;
     private int size;
 
-    public DoublyLinkedList() {
-        SentinelNode frontNode = new SentinelNode();
-        SentinelNode backNode = new SentinelNode();
+    DoublyLinkedList() {
+        SentinelNode headSentinel = new SentinelNode();
+        SentinelNode tailSentinel = new SentinelNode();
 
-        head = frontNode;
-        tail = backNode;
+        head = headSentinel;
+        tail = tailSentinel;
         size = 0;
     }
 
@@ -23,7 +34,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E first() {
-        return null;
+        return head.next().data;
     }
 
     /**
@@ -31,7 +42,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E last() {
-        return null;
+        return tail.prev().data;
     }
 
     /**
@@ -123,7 +134,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -132,7 +143,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     /**
@@ -146,7 +157,7 @@ public class DoublyLinkedList<E> implements List<E> {
     /**
      * Locates a given element in the list and returns the index of that element.
      *
-     * @param element
+     * @param element The element being searched for.
      */
     @Override
     public int indexOf(E element) {
@@ -156,39 +167,29 @@ public class DoublyLinkedList<E> implements List<E> {
     /**
      * Represents the data container used in a node-based list.
      */
-    protected class DataNode implements Node {
+    private class DataNode {
         E data;
-        Node next;
-        Node prev;
+        DataNode next;
+        DataNode prev;
 
         DataNode(E data) {
             this.data = data;
             this.next = null;
         }
 
-        @Override
-        public Node next(){ return next; }
+        DataNode next(){ return next; }
 
-        @Override
-        public Node prev() { return prev; }
+        DataNode prev() { return prev; }
     }
 
     /**
      * Represents the end caps of a node-based list.
      */
-    protected class SentinelNode implements Node {
-        Node next;
-        Node prev;
-
+    private class SentinelNode extends DataNode {
         SentinelNode() {
+            super(null);
             next = null;
             prev = null;
         }
-
-        @Override
-        public Node next() { return next; }
-
-        @Override
-        public Node prev() { return prev; }
     }
 }

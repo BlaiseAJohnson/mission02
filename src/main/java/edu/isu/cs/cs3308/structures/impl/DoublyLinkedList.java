@@ -53,7 +53,11 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void addLast(E element) {
-
+        if (element != null) {
+            Node newNode = new Node(element);
+            insertNode(tail, newNode);
+            size++;
+        }
     }
 
     /**
@@ -64,7 +68,11 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void addFirst(E element) {
-
+        if (element != null) {
+            Node newNode = new Node(element);
+            insertNode(head.next(), newNode);
+            size++;
+        }
     }
 
     /**
@@ -74,7 +82,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E removeFirst() {
-        return null;
+        return remove(0);
     }
 
     /**
@@ -84,7 +92,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E removeLast() {
-        return null;
+        return remove(size() - 1);
     }
 
     /**
@@ -99,7 +107,31 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void insert(E element, int index) {
+        if (element != null && index >= 0) {
+            // If the insertion index is greater than the size of the list...
+            if (index >= size()) {
+                addLast(element);
+            }
+            else if (index == 0) {
+                addFirst(element);
+            }
+            // If the insertion index is in the latter half of the list...
+            else if (index >= size()/2) {
+                Node newNode = new Node(element);
+                Node nodeAtIndex = walkBackwards(tail.prev(), size - index);
 
+                insertNode(nodeAtIndex, newNode);
+            }
+            // If the insertion index is in the former half of the list...
+            else {
+                Node newNode = new Node(element);
+                Node nodeAtIndex = walkForwards(head.next(), index);
+
+                insertNode(nodeAtIndex, newNode);
+            }
+
+            size++;
+        }
     }
 
     /**
@@ -125,7 +157,20 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E get(int index) {
-        return null;
+        if (index < 0 || index >= size) return null;
+
+        // If the index is in the latter half of the list...
+        if (index >= size/2) {
+            Node nodeAtIndex = walkBackwards(tail.prev(), size - index);
+
+            return nodeAtIndex.data;
+        }
+        // If the index is in the former half of the list...
+        else {
+            Node nodeAtIndex = walkForwards(head.next(), index);
+
+            return nodeAtIndex.data;
+        }
     }
 
     /**
@@ -165,12 +210,57 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     /**
+     * Dependency function for inserting a node into a doubly-linked list.
+     * @param currentNode The node into which whose index the new node will be inserted.
+     * @param newNode The node to be inserted.
+     */
+    private void insertNode(Node currentNode, Node newNode) {
+        Node previousNode = currentNode.prev();
+
+        // Connect new node to adjacent nodes.
+        newNode.prev = previousNode;
+        newNode.next = currentNode;
+
+        // Connect adjacent nodes to new node.
+        previousNode.next = newNode;
+        currentNode.prev = newNode;
+    }
+
+    /**
+     * Dependency function for walking forwards through a list.
+     * @param currentNode Starting node from which to walk.
+     * @param index How far to walk.
+     * @return The resulting node after the walk.
+     */
+    private Node walkForwards(Node currentNode, int index) {
+        for (int i = 0; i < index; i++) {
+            currentNode = currentNode.next();
+        }
+
+        return currentNode;
+    }
+
+    /**
+     * Dependency function for walking backwards through a list.
+     * @param currentNode Starting node from which to walk.
+     * @param indexFromEnd How far to walk.
+     * @return The resulting node after the walk.
+     */
+    private Node walkBackwards(Node currentNode, int indexFromEnd) {
+        for (int i = 0; i < indexFromEnd; i++) {
+            currentNode = currentNode.prev();
+        }
+
+        return currentNode;
+    }
+
+    /**
      * Represents the data container used in a node-based list.
      */
     private class Node {
         E data;
-        Node next;
-        Node prev;
+        private Node next;
+        private Node prev;
 
         Node(E data) {
             this.data = data;

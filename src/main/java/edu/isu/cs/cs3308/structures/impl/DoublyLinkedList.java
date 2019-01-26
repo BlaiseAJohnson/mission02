@@ -27,6 +27,9 @@ public class DoublyLinkedList<E> implements List<E> {
         head = headSentinel;
         tail = tailSentinel;
         size = 0;
+
+        head.next = tail;
+        tail.prev = head;
     }
 
     /**
@@ -56,7 +59,6 @@ public class DoublyLinkedList<E> implements List<E> {
         if (element != null) {
             Node newNode = new Node(element);
             insertNode(tail, newNode);
-            size++;
         }
     }
 
@@ -71,7 +73,6 @@ public class DoublyLinkedList<E> implements List<E> {
         if (element != null) {
             Node newNode = new Node(element);
             insertNode(head.next(), newNode);
-            size++;
         }
     }
 
@@ -116,7 +117,7 @@ public class DoublyLinkedList<E> implements List<E> {
                 addFirst(element);
             }
             // If the insertion index is in the latter half of the list...
-            else if (index >= size()/2) {
+            else if (index >= size/2) {
                 Node newNode = new Node(element);
                 Node nodeAtIndex = walkBackwards(tail.prev(), size - index);
 
@@ -129,8 +130,6 @@ public class DoublyLinkedList<E> implements List<E> {
 
                 insertNode(nodeAtIndex, newNode);
             }
-
-            size++;
         }
     }
 
@@ -143,7 +142,18 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public E remove(int index) {
-        return null;
+        if (index >= size || index < 0) return null;
+
+        if (index >= size/2) {
+            Node nodeAtIndex = walkBackwards(tail.prev(), size - index);
+
+            return removeNode(nodeAtIndex);
+        }
+        else {
+            Node nodeAtIndex = walkForwards(head.next(), index);
+
+            return removeNode(nodeAtIndex);
+        }
     }
 
     /**
@@ -196,7 +206,12 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void printList() {
+        Node currentNode = head.next;
 
+        while (!(currentNode instanceof DoublyLinkedList.SentinelNode)) {
+            System.out.println(currentNode.data);
+            currentNode = currentNode.next();
+        }
     }
 
     /**
@@ -224,6 +239,8 @@ public class DoublyLinkedList<E> implements List<E> {
         // Connect adjacent nodes to new node.
         previousNode.next = newNode;
         currentNode.prev = newNode;
+
+        size++;
     }
 
     /**
@@ -247,7 +264,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * @return The resulting node after the walk.
      */
     private Node walkBackwards(Node currentNode, int indexFromEnd) {
-        for (int i = 0; i < indexFromEnd; i++) {
+        for (int i = 0; i < indexFromEnd - 1; i++) {
             currentNode = currentNode.prev();
         }
 
@@ -255,12 +272,34 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     /**
+     * Dependency function for removing nodes from a list.
+     * @param nodeToRemove The node to be removed.
+     * @return The data of the removed node.
+     */
+    private E removeNode(Node nodeToRemove) {
+        Node previousNode = nodeToRemove.prev();
+        Node nextNode = nodeToRemove.next();
+
+        // Connect adjacent nodes.
+        previousNode.next = nextNode;
+        nextNode.prev = previousNode;
+
+        // Detach current node.
+        nodeToRemove.prev = null;
+        nodeToRemove.next = null;
+
+        size--;
+
+        return nodeToRemove.data;
+    }
+
+    /**
      * Represents the data container used in a node-based list.
      */
     private class Node {
         E data;
-        private Node next;
-        private Node prev;
+        Node next;
+        Node prev;
 
         Node(E data) {
             this.data = data;

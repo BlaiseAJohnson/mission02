@@ -48,7 +48,7 @@ public class DoublyLinkedListTest {
         assertEquals(0, fixture.size());
         fixture.addLast(0);
         assertEquals(1, fixture.size());
-        assertEquals(new Integer(0), fixture.get(0));
+        assertEquals((Integer) 0, fixture.get(0));
         fixture.addLast(null);
         assertEquals("Size was incorrectly updated", 1, fixture.size());
     }

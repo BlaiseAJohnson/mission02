@@ -2,10 +2,12 @@ package edu.isu.cs.cs3308.structures.impl;
 
 import edu.isu.cs.cs3308.structures.Stack;
 
-public class LinkedStack<E> implements Stack<E> {
+public class LinkedStack<E>  implements Stack<E> {
+
+    private DoublyLinkedList<E> stack;
 
     public LinkedStack() {
-
+        stack = new DoublyLinkedList<>();
     }
 
     /**
@@ -17,7 +19,7 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public void push(E element) {
-
+        stack.addLast(element);
     }
 
     /**
@@ -29,7 +31,9 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public E peek() {
-        return null;
+        E peekData = stack.removeLast();
+        stack.addLast(peekData);
+        return peekData;
     }
 
     /**
@@ -41,7 +45,7 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public E pop() {
-        return null;
+        return stack.removeLast();
     }
 
     /**
@@ -49,7 +53,7 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public int size() {
-        return 0;
+        return stack.size();
     }
 
     /**
@@ -59,11 +63,11 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return stack.isEmpty();
     }
 
     /**
-     * Tranfers the contents of this stack into the provided stack. The contents
+     * Transfers the contents of this stack into the provided stack. The contents
      * of this stack are to found in reverse order at the top of the provided
      * stack. This stack should be empty once the transfer is completed. Note
      * that if the provided stack is null, nothing is to happen.
@@ -74,7 +78,11 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public void transfer(Stack<E> to) {
-
+        if (to != null) {
+            while (size() > 0) {
+                to.push(pop());
+            }
+        }
     }
 
     /**
@@ -82,7 +90,14 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public void reverse() {
+        LinkedStack<E> stepOne = new LinkedStack<>();
+        LinkedStack<E> stepTwo = new LinkedStack<>();
 
+        // Three reversals are performed here, ending in the original stack.
+        // This effectively reverses the content of the original stack.
+        transfer(stepOne);
+        stepOne.transfer(stepTwo);
+        stepTwo.transfer(this);
     }
 
     /**
@@ -97,7 +112,41 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public void merge(Stack<E> other) {
+        if (other != null) {
+            LinkedStack<E> thisTemp = new LinkedStack<>();
+            LinkedStack<E> otherCopy = copy(other);
 
+            // Store this into a temp stack.
+            transfer(thisTemp);
+
+            // Reverse other so order is preserve during transfer.
+            otherCopy.reverse();
+
+            // Transfer other into this.
+            otherCopy.transfer(this);
+
+            // Transfer original contents back into this.
+            thisTemp.transfer(this);
+        }
+    }
+
+    private LinkedStack<E> copy(Stack<E> of) {
+        LinkedStack<E> originalTemp = new LinkedStack<>();
+        LinkedStack<E> copyTemp = new LinkedStack<>();
+        LinkedStack<E> copy = new LinkedStack<>();
+
+        // Pop each item off the original and push a copy into each of two temp stacks.
+        while(of.size() > 0) {
+            E stackData = of.pop();
+            originalTemp.push(stackData);
+            copyTemp.push(stackData);
+        }
+
+        // Transfer the data back from the temps into the original and the copy respectively.
+        originalTemp.transfer(of);
+        copyTemp.transfer(copy);
+
+        return copy;
     }
 
     /**
@@ -106,6 +155,16 @@ public class LinkedStack<E> implements Stack<E> {
      */
     @Override
     public void printStack() {
+        LinkedStack<E> thisTemp = new LinkedStack<>();
 
+        while (size() > 0) {
+            E stackData = pop();
+
+            System.out.println(stackData);
+
+            thisTemp.push(stackData);
+        }
+
+        thisTemp.transfer(this);
     }
 }

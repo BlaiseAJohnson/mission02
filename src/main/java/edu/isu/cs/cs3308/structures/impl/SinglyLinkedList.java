@@ -1,4 +1,4 @@
-/**
+/*
  * Blaise Johnson
  * CS 3308
  * Isaac Griffith
@@ -15,9 +15,9 @@ import edu.isu.cs.cs3308.structures.List;
  */
 public class SinglyLinkedList<E> implements List<E> {
 
-    protected Node head = null;
-    protected Node tail = null;
-    protected int size = 0;
+    private Node head = null;
+    private Node tail = null;
+    private int size = 0;
 
     /**
      * @return first element in the list or null if the list is empty.
@@ -28,7 +28,7 @@ public class SinglyLinkedList<E> implements List<E> {
             return null;
         }
         else {
-            return head.nodeData;
+            return head.data;
         }
     }
 
@@ -41,7 +41,7 @@ public class SinglyLinkedList<E> implements List<E> {
             return null;
         }
         else {
-            return tail.nodeData;
+            return tail.data;
         }
     }
 
@@ -63,12 +63,12 @@ public class SinglyLinkedList<E> implements List<E> {
             else {
                 // Travel to the correct node.
                 Node currentNode = head;
-                while (currentNode.getNextNode() != null) {
-                    currentNode = currentNode.getNextNode();
+                while (currentNode.next() != null) {
+                    currentNode = currentNode.next();
                 }
 
                 // Append the node and update tail.
-                currentNode.nextNode = newNode;
+                currentNode.next = newNode;
                 tail = newNode;
             }
 
@@ -88,7 +88,7 @@ public class SinglyLinkedList<E> implements List<E> {
             Node newHead = new Node(element);
 
             // Prepend the node and update head
-            newHead.nextNode = head;
+            newHead.next = head;
             head = newHead;
 
             size++;
@@ -140,12 +140,12 @@ public class SinglyLinkedList<E> implements List<E> {
                 // Travel to correct index while storing the previous node.
                 for (int i = 0; i < index; i++) {
                     previousNode = currentNode;
-                    currentNode = currentNode.nextNode;
+                    currentNode = currentNode.next;
                 }
 
                 // Connect the newNode to the previous node, and the current node to the new node.
-                previousNode.nextNode = newNode;
-                newNode.nextNode = currentNode;
+                previousNode.next = newNode;
+                newNode.next = currentNode;
 
                 // Increment the list size.
                 size++;
@@ -171,13 +171,13 @@ public class SinglyLinkedList<E> implements List<E> {
         // Travel to the correct node while storing the previous node
         for (int i = 0; i < index; i++) {
             nodeBeforeCurrent = currentNode;
-            currentNode = currentNode.nextNode;
+            currentNode = currentNode.next;
         }
-        nodeAfterCurrent = currentNode.nextNode;
+        nodeAfterCurrent = currentNode.next;
 
         // Connect the nodes on either side of the current node, then detach it.
-        nodeBeforeCurrent.nextNode = nodeAfterCurrent;
-        currentNode.nextNode = null;
+        nodeBeforeCurrent.next = nodeAfterCurrent;
+        currentNode.next = null;
 
         // Update head or tail.
         if (index == 0) {
@@ -189,7 +189,7 @@ public class SinglyLinkedList<E> implements List<E> {
 
         // Return contents of removed node and decrease list size.
         size--;
-        return currentNode.nodeData;
+        return currentNode.data;
 
     }
 
@@ -209,10 +209,10 @@ public class SinglyLinkedList<E> implements List<E> {
         // Travel to the correct node
         Node currentNode = head;
         for (int i = 0; i < index; i++) {
-            currentNode = currentNode.getNextNode();
+            currentNode = currentNode.next();
         }
 
-        return currentNode.nodeData;
+        return currentNode.data;
 
     }
 
@@ -243,11 +243,11 @@ public class SinglyLinkedList<E> implements List<E> {
         Node currentNode = head;
 
         while (true) {
-            System.out.println(currentNode.nodeData);
+            System.out.println(currentNode.data);
 
-            if (currentNode.nextNode == null) break;
+            if (currentNode.next == null) break;
 
-            currentNode = currentNode.nextNode;
+            currentNode = currentNode.next;
         }
     }
 
@@ -263,12 +263,12 @@ public class SinglyLinkedList<E> implements List<E> {
 
             // Walk the list until the element is found or the end is reached and it is not found.
             while (!elementFound) {
-                if (currentNode.nodeData.equals(element)) {
+                if (currentNode.data.equals(element)) {
                     elementFound = true;
-                } else if (currentNode.nextNode == null) {
+                } else if (currentNode.next == null) {
                     break;
                 } else {
-                    currentNode = currentNode.getNextNode();
+                    currentNode = currentNode.next();
                     currentIndex++;
                 }
             }
@@ -284,16 +284,17 @@ public class SinglyLinkedList<E> implements List<E> {
      * Represents the data container used in the SinglyLinkedList class.
      */
     protected class Node {
-        E nodeData;
-        Node nextNode;
+        E data;
+        Node next;
 
-        Node(E nodeData) {
-            this.nodeData = nodeData;
-            this.nextNode = null;
+        Node(E data) {
+            this.data = data;
+            this.next = null;
         }
 
-        Node getNextNode(){
-            return nextNode;
+
+        Node next() {
+            return next;
         }
     }
 }

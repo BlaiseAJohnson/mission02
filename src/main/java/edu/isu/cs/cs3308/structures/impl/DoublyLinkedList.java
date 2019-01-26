@@ -167,29 +167,28 @@ public class DoublyLinkedList<E> implements List<E> {
     /**
      * Represents the data container used in a node-based list.
      */
-    private class DataNode {
+    private class Node {
         E data;
-        DataNode next;
-        DataNode prev;
+        Node next;
+        Node prev;
 
-        DataNode(E data) {
+        Node(E data) {
             this.data = data;
-            this.next = null;
+            next = null;
+            prev = null;
         }
 
-        DataNode next(){ return next; }
+        Node next(){ return next; }
 
-        DataNode prev() { return prev; }
+        Node prev() { return prev; }
     }
 
     /**
      * Represents the end caps of a node-based list.
      */
-    private class SentinelNode extends DataNode {
+    private class SentinelNode extends Node {
         SentinelNode() {
             super(null);
-            next = null;
-            prev = null;
         }
     }
 }

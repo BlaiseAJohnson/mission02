@@ -20,21 +20,23 @@ public class PostFix {
      * empty, or contains only whitespace.
      */
     public static int evalPostFix(String postfix) {
-        if (postfix == null || postfix.replaceAll(" ", "").equals("")) return 0;
+        if (postfix == null || postfix.trim().isEmpty()) return 0;
 
         LinkedStack<Integer> stack = new LinkedStack<>();
 
+        // Split the postfix expression into an array of terms.
         String[] equation = postfix.split(" ");
 
+        // For each term...
         for (String currentSymbol : equation) {
 
-            if (!currentSymbol.equals(" ")) {
-                if (intTryParse(currentSymbol)) {
-                    int currentNum = Integer.parseInt(currentSymbol);
-                    stack.push(currentNum);
-                }
-                else performOperation(currentSymbol, stack);
+            // If it can be parsed to an int, do so and push it onto the stack.
+            if (intTryParse(currentSymbol)) {
+                int currentNum = Integer.parseInt(currentSymbol);
+                stack.push(currentNum);
             }
+            // Otherwise perform the specified operation.
+            else performOperation(currentSymbol, stack);
         }
 
         return stack.pop();

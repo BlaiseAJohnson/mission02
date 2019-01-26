@@ -68,7 +68,7 @@ public class LinkedStack<E>  implements Stack<E> {
 
     /**
      * Transfers the contents of this stack into the provided stack. The contents
-     * of this stack are to found in reverse order at the top of the provided
+     * of this stack are to be found in reverse order at the top of the provided
      * stack. This stack should be empty once the transfer is completed. Note
      * that if the provided stack is null, nothing is to happen.
      *
@@ -80,7 +80,7 @@ public class LinkedStack<E>  implements Stack<E> {
     public void transfer(Stack<E> to) {
         if (to != null) {
             while (size() > 0) {
-                to.push(pop());
+                to.push(this.pop());
             }
         }
     }

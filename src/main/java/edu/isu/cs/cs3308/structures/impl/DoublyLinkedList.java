@@ -144,11 +144,13 @@ public class DoublyLinkedList<E> implements List<E> {
     public E remove(int index) {
         if (index >= size || index < 0) return null;
 
+        // If the removal index is in the latter half of the list..
         if (index >= size/2) {
             Node nodeAtIndex = walkBackwards(tail.prev(), size - index);
 
             return removeNode(nodeAtIndex);
         }
+        // If the removal index is in the former half of the list...
         else {
             Node nodeAtIndex = walkForwards(head.next(), index);
 
@@ -221,7 +223,22 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public int indexOf(E element) {
-        return 0;
+        Node currentNode = head.next();
+        boolean elementFound = false;
+        int elementIndex = 0;
+
+        // While the element hasn't been found and currentNode is not a SentinelNode...
+        while (!elementFound && !(currentNode instanceof DoublyLinkedList.SentinelNode)) {
+            if (currentNode.data.equals(element)) {
+                elementFound = true;
+            }
+            else {
+                currentNode = currentNode.next();
+                elementIndex++;
+            }
+        }
+
+        return elementFound? elementIndex : -1;
     }
 
     /**
